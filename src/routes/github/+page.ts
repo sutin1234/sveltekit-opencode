@@ -13,7 +13,12 @@ const MOCK_REPOS = Array.from({ length: 25 }, (_, i) => ({
 }));
 
 export const load: PageLoad = async ({ fetch, url }) => {
-	const page = url.searchParams.get('page') || '1';
+	let page = '1';
+	try {
+		page = url.searchParams.get('page') || '1';
+	} catch {
+		// searchParams not available during prerendering
+	}
 
 	if (import.meta.env.VITE_MOCK_API === 'true') {
 		const pageNum = parseInt(page);

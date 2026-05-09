@@ -11,7 +11,15 @@
 	let { data }: PageProps = $props();
 
 	const repos = useRepos(() => data.repos, () => data.totalPages);
-	const currentPage = $derived(Number($page.url.searchParams.get('page')) || 1);
+	const currentPage = $derived(getCurrentPage());
+
+	function getCurrentPage() {
+		try {
+			return Number($page.url.searchParams.get('page')) || 1;
+		} catch {
+			return 1;
+		}
+	}
 </script>
 
 <div class="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
