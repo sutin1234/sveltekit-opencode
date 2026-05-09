@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  VITE_MOCK_API: "true"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install
+
+      - run: bun run prepare
+
+      - run: bun run check
+
+      - run: bun run test
+
+      - run: npx playwright install --with-deps chromium
+
+      - run: bun run test:e2e
+
+      - run: bun run build
